@@ -1,0 +1,14 @@
+names:
+- Valorant-enemy
+- enemy
+- enemy_head
+nc: 3
+roboflow:
+  license: CC BY 4.0
+  project: valorant-enemy
+  url: https://universe.roboflow.com/david-hong/valorant-enemy/dataset/2
+  version: 2
+  workspace: david-hong
+test: test/images
+train: train/images
+val: valid/images
