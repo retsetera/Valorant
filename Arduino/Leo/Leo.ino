@@ -1,5 +1,4 @@
-#define PROFILE_WINDOWS
-#include <absolute-mouse.h>
+
 
 #include <Mouse.h>
 #include <Mouse.h>
@@ -8,8 +7,8 @@ float x_offset, y_offset;
 void setup()
 {
   Serial.begin(115200);
+  Serial.setTimeout(10);
   Mouse.begin();
-  AbsoluteMouse.begin(1920, 1080);
 }
 
 
@@ -31,15 +30,15 @@ void loop()
     {
       int status = Serial.parseInt();
 
-      if (status==1) Mouse.press('MOUSE_LEFT');
-      else Mouse.release('MOUSE_LEFT');
+      if (status==1) Mouse.press(MOUSE_LEFT);
+      else Mouse.release(MOUSE_LEFT);
     }
     else if (inChar=='R')
     {
       int status = Serial.parseInt();
 
-      if (status==1) Mouse.press('MOUSE_RIGHT');
-      else Mouse.release('MOUSE_RIGHT');
+      if (status==1) Mouse.press(MOUSE_RIGHT);
+      else Mouse.release(MOUSE_RIGHT);
     }
   }
 }

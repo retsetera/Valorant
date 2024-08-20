@@ -11,12 +11,13 @@ from pynput import mouse
 from pynput.mouse import Controller, Button
 import time
 
-activation_key='l'
+activation_key='ctrl'
 
 
 #setup
 arduino_leo = ArduinoMouse('Leonardo')
-#arduino_due = ArduinoMouse('Due')
+arduino_due = ArduinoMouse('Due')
+
 camera = dxcam.create(output_color='BGR')
 mouse = Controller()
 screen = camera.grab()
@@ -31,19 +32,33 @@ screen = None
 
 current_mouse_state=[] #x, y, wheel, left, right
 
+def arduino_task(leo,due):
+    serial_read = due.read_serial()
+    if (serial_read != ''):
+        command = serial_read[0]
+        variables = serial_read[1::]
+        if command=='M':
+            x = int(variables.split()[0])
+            y = int(variables.split()[1])
+            leo.move(x,y,0)
+        elif command=='L':
+            leo.Left_Mouse(bool(int(variables)))
+        elif command=='R':
+            leo.Left_Mouse(bool(int(variables)))
+
 
 while True:
-    """serial_read = arduino_due.read_serial()
-    if serial_read is not None:
-        new_mouse = map(int, serial_read.split())
-        arduino_leo.input(new_mouse)"""
-        
+    
     if not keyboard.is_pressed(activation_key):
+
+        arduino_task(arduino_leo, arduino_due)
         continue
+        
+    
+    print('6') 
     img = camera.grab()
     if img is not None:
         screen=img
-    #screen = cv2.resize(screen, (0,0), fx=0.4, fy=1.2)
 
     data, picture = outline_filter(screen,0)
     contours = [x[0] for x in data]
@@ -64,7 +79,7 @@ while True:
     mpvariation = math.floor(math.dist(middle_of_screen, position)/2)
     curve = get_curve(middle_of_screen, position, mpvariation, sigmoid_time_func, middle_of_screen)
 
-    mouse.position=true_middle
+    #mouse.position=true_middle
     for point in curve:
         if (not keyboard.is_pressed(activation_key)):
             break
@@ -72,9 +87,7 @@ while True:
         arduino_leo.move(point[0],point[1],0)
 
     if (keyboard.is_pressed(activation_key)):
-        #arduino_leo.Click()
-        print()
-
+        arduino_leo.Click()
 
 
     """for point in curve:

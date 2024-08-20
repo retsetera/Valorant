@@ -12,7 +12,7 @@ class ArduinoMouse:
     def __init__(self, port_search_term):
         self.serial_port = serial.Serial()
         self.serial_port.baudrate = 115200
-        self.serial_port.timeout = 1
+        self.serial_port.timeout = 0.01
         self.serial_port.port = self.find_serial_port(port_search_term)
         try:
             self.serial_port.open()
@@ -21,7 +21,7 @@ class ArduinoMouse:
             sys.exit()
 
     def find_serial_port(self, port_search_term):
-        port = next((port for port in list_ports.comports() if (("Arduino" in port.description) or (port_search_term in port.description))), None)
+        port = next((port for port in list_ports.comports() if (("Arduino" in port.description) and (port_search_term in port.description))), None)
         if port is not None:
             return port.device
         else:
@@ -30,7 +30,7 @@ class ArduinoMouse:
 
 
 
-    def move(self, x, y, wheel):
+    def move(self, x=0, y=0, wheel=0):
         #x = x + 256 if x < 0 else x
         #y = y + 256 if y < 0 else y
         self.serial_port.write(('M'+str(int(x))+' '+str(int(y))+' '+str(int(wheel))).encode())
@@ -41,9 +41,9 @@ class ArduinoMouse:
         self.Left_Mouse(False)
 
 
-    def Left_Mouse(self, status: bool):
+    def Left_Mouse(self, status: bool=False):
         self.serial_port.write(('L'+str(int(status))).encode())
-    def Right_Mouse(self, status: bool):
+    def Right_Mouse(self, status: bool=False):
         self.serial_port.write(('R'+str(int(status))).encode())
 
     def read_serial(self):
@@ -56,4 +56,3 @@ class ArduinoMouse:
         self.close()
 
 
-print()

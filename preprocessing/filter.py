@@ -7,7 +7,7 @@ import math
 
 def outline_filter(_img,color):
     img=np.asarray(_img)
-    colors = np.array([[[135, 35, 20],[155, 255, 255]],[[140,120,180],[160,200,255]]],dtype='uint8')#purple,
+    colors = np.array([[[135, 35, 20],[155, 255, 255]],[[144, 75, 20],[158, 255, 255]]],dtype='uint8')#purple,
     
     hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
@@ -23,6 +23,7 @@ def outline_filter(_img,color):
     positions=[]
     onblank = np.zeros(hsv.shape, dtype='uint8')
     onblank = cv2.drawContours(onblank, contours, -1, (0, 255, 0), 1, cv2.LINE_AA)
+    
     for contour in contours:
         x,y,w,h = cv2.boundingRect(contour)
         
