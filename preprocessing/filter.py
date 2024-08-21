@@ -18,7 +18,7 @@ def outline_filter(_img,color):
     contours = contours
     if not contours:
         return
-    contours = [i for i in contours if cv2.contourArea(i)>=2000]
+    contours = [i for i in contours if cv2.contourArea(i)>=1000]
 
     positions=[]
     onblank = np.zeros(hsv.shape, dtype='uint8')

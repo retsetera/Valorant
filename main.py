@@ -10,6 +10,9 @@ import math
 from pynput import mouse
 from pynput.mouse import Controller, Button
 import time
+from PIL import Image
+from screen_cap import ScreenCapture
+import matplotlib.pyplot as plt
 
 activation_key='ctrl'
 
@@ -18,15 +21,15 @@ activation_key='ctrl'
 arduino_leo = ArduinoMouse('Leonardo')
 arduino_due = ArduinoMouse('Due')
 
-camera = dxcam.create(output_color='BGR')
-mouse = Controller()
-screen = camera.grab()
+#camera = dxcam.create(output_color='BGR')
+camera = ScreenCapture(1,1,(2560,1080))
+screen = camera.get_screen()
 #screen = cv2.resize(screen, (0,0), fx=2/3, fy=2/3)
 resolution=(screen.shape[0], screen.shape[1])
 #middle_of_screen = (math.floor(resolution[0]/2), math.floor(resolution[1]/2))
-middle_of_screen=(camera.region[2]/2,camera.region[3]/2)
+middle_of_screen=(resolution[0]/2,resolution[1]/2)
 
-true_middle=(camera.region[2]/2,camera.region[3]/2)
+true_middle=middle_of_screen
 
 screen = None
 
@@ -56,25 +59,28 @@ while True:
         
     
     print('6') 
-    img = camera.grab()
+    img = camera.get_screen()
     if img is not None:
         screen=img
 
     data, picture = outline_filter(screen,0)
+    
     contours = [x[0] for x in data]
     positions = [x[1] for x in data]
     if len(contours)==0:
         continue
     biggest_contour=cv2.contourArea(contours[0])
     biggest_contour_index = 0
-    for i in range(len(contours)-1):
-        if cv2.contourArea(contours[i+1])>biggest_contour:
-            biggest_contour_index=i+1
-            biggest_contour = cv2.contourArea(contours[biggest_contour_index])
-    
-    position = positions[biggest_contour_index]
+    min_dist=9999
+    min_dist_index=0
+    for i in range(len(positions)):
+        if math.dist(middle_of_screen,positions[i])<min_dist:
+            min_dist_index=i
+            min_dist= math.dist(middle_of_screen,positions[i])
+    #position = min([math.dist(middle_of_screen, i) for i in positions])
+    position = positions[min_dist_index]
 
-    position=(math.floor((position[0]-middle_of_screen[0])*2/3)+middle_of_screen[0],math.floor((position[1]-middle_of_screen[1])*2/3)+middle_of_screen[1])
+    position=(math.floor((position[0]-middle_of_screen[0])*3.7)+middle_of_screen[0],math.floor((position[1]-middle_of_screen[1])*3.7)+middle_of_screen[1])
 
     mpvariation = math.floor(math.dist(middle_of_screen, position)/2)
     curve = get_curve(middle_of_screen, position, mpvariation, sigmoid_time_func, middle_of_screen)
