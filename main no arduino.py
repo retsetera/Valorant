@@ -15,32 +15,27 @@ from screen_cap import ScreenCapture
 import matplotlib.pyplot as plt
 
 
-class dan:
+class dan_no_arduino:
     
     def __init__(self, resolution, activation_key='caps lock', color=0):
         self.activation_key=activation_key
         self.color=color
-        #setup
-        self.arduino_leo = ArduinoMouse('Leonardo')
-        self.arduino_due = ArduinoMouse('Due')
 
-        #camera = dxcam.create(output_color='BGR')
+
         self.camera = ScreenCapture(0,0,resolution)
-        #screen = cv2.resize(screen, (0,0), fx=2/3, fy=2/3)
         self.resolution=resolution
-        #middle_of_screen = (math.floor(resolution[0]/2), math.floor(resolution[1]/2))
         self.middle_of_screen=(resolution[0]/2,resolution[1]/2)
+        self.mouse=Controller()
 
 
 
     def task(self):
         if not keyboard.is_pressed(self.activation_key):
 
-            arduino_task(self.arduino_leo, self.arduino_due)
+            #arduino_task(self.arduino_leo, self.arduino_due)
             return
             
         
-        print('6') 
         img = self.camera.get_screen()
         if img is not None:
             screen=img
@@ -59,23 +54,21 @@ class dan:
                 min_dist= math.dist(self.middle_of_screen,positions[i])
         position = positions[min_dist_index]
 
-        position=(math.floor((position[0]-self.middle_of_screen[0])*3.7)+self.middle_of_screen[0],math.floor((position[1]-self.middle_of_screen[1])*3.7)+self.middle_of_screen[1])
 
         mpvariation = math.floor(min_dist/2)
-        curve = get_curve(self.middle_of_screen, position, mpvariation, sigmoid_time_func, middle_of_screen)
+        curve = get_curve(self.middle_of_screen, position, mpvariation, sigmoid_time_func, self.middle_of_screen)
 
-        #mouse.position=true_middle
+        self.mouse.position=self.middle_of_screen
         amount_to_delay=0.0005*min_dist
         for point in curve:
             if (not keyboard.is_pressed(self.activation_key)):
                 break
-            #mouse.position = (mouse.position[0]+point[0], mouse.position[1]+point[1])
-            self.arduino_leo.move(point[0],point[1],0)
-            time.sleep()
+            self.mouse.position = (self.mouse.position[0]+point[0], self.mouse.position[1]+point[1])
+            #time.sleep()
 
         if (keyboard.is_pressed(self.activation_key)):
-            self.arduino_leo.Click()
-
+            self.mouse.click(Button.left)
+            
 
         """for point in curve:
             arduino.move(arduino, x=point[0], y=point[1])
@@ -93,3 +86,8 @@ def arduino_task(leo,due):
             leo.write_serial(serial_read.strip()+' '+'0')
         else:
             leo.write_serial(serial_read.strip())
+
+
+bot = dan_no_arduino((1920,1080),color=0,activation_key='ctrl')
+while True:
+    bot.task()

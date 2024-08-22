@@ -12,7 +12,7 @@ class ArduinoMouse:
     def __init__(self, port_search_term):
         self.serial_port = serial.Serial()
         self.serial_port.baudrate = 115200
-        self.serial_port.timeout = 0.01
+        self.serial_port.timeout = 0.001
         self.serial_port.port = self.find_serial_port(port_search_term)
         try:
             self.serial_port.open()
@@ -48,6 +48,9 @@ class ArduinoMouse:
 
     def read_serial(self):
         return self.serial_port.readline().decode()
+    
+    def write_serial(self,text):
+        self.serial_port.write(text)
 
     def close(self):
         self.serial_port.close()
