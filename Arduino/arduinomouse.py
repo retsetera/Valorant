@@ -47,7 +47,7 @@ class ArduinoMouse:
         self.serial_port.write(('R'+str(int(status))).encode())
 
     def read_serial(self):
-        return self.serial_port.readline().decode()
+        return self.serial_port.readline().decode().strip()
     
     def write_serial(self,text):
         self.serial_port.write(text)
@@ -58,4 +58,8 @@ class ArduinoMouse:
     def __del__(self):
         self.close()
 
+def arduino_task(leo,due):
+    serial_read = due.read_serial()
+    if (serial_read != ''):
+        leo.write_serial(serial_read.strip())
 

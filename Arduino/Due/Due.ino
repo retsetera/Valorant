@@ -79,7 +79,7 @@ void loop() {
   int y=mouse.getYChange();
   if (x+y!=0)
   {
-    Serial.println("M"+String(x)+" "+String(y));
+    Serial.println("M"+String(x)+" "+String(y)+" 0");
   }
   //if (mouse.getButton(LEFT_BUTTON)!=leftButton)
     //leftButton=!leftButton;

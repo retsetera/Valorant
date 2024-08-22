@@ -37,8 +37,8 @@ void loop()
     {
       int status = Serial.parseInt();
 
-      if (status==1) Mouse.press("MOUSE_RIGHT");
-      else Mouse.release("MOUSE_RIGHT");
+      if (status==1) Mouse.press(MOUSE_RIGHT);
+      else Mouse.release(MOUSE_RIGHT);
     }
   }
 }

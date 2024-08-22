@@ -77,15 +77,7 @@ class dan_no_arduino:
 
 
 
-def arduino_task(leo,due):
-    serial_read = due.read_serial()
-    if (serial_read != ''):
-        command = serial_read[0]
-        variables = serial_read[1::]
-        if command=='M':
-            leo.write_serial(serial_read.strip()+' '+'0')
-        else:
-            leo.write_serial(serial_read.strip())
+
 
 
 bot = dan_no_arduino((1920,1080),color=0,activation_key='ctrl')

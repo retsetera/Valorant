@@ -2,7 +2,7 @@ import numpy as np
 import dxcam
 from preprocessing.filter import outline_filter
 from MathFunctions.curve import get_curve, sigmoid_time_func
-from Arduino.arduinomouse import ArduinoMouse
+from Arduino.arduinomouse import ArduinoMouse, arduino_task
 import cv2
 import pyautogui
 import keyboard
@@ -62,7 +62,7 @@ class dan:
         position=(math.floor((position[0]-self.middle_of_screen[0])*3.7)+self.middle_of_screen[0],math.floor((position[1]-self.middle_of_screen[1])*3.7)+self.middle_of_screen[1])
 
         mpvariation = math.floor(min_dist/2)
-        curve = get_curve(self.middle_of_screen, position, mpvariation, sigmoid_time_func, middle_of_screen)
+        curve = get_curve(self.middle_of_screen, position, mpvariation, sigmoid_time_func, self.middle_of_screen)
 
         #mouse.position=true_middle
         amount_to_delay=0.0005*min_dist
@@ -83,13 +83,7 @@ class dan:
         arduino.click(arduino)"""
 
 
+bot = dan((1920,1080),'ctrl',0)
+while True:
+    bot.task()
 
-def arduino_task(leo,due):
-    serial_read = due.read_serial()
-    if (serial_read != ''):
-        command = serial_read[0]
-        variables = serial_read[1::]
-        if command=='M':
-            leo.write_serial(serial_read.strip()+' '+'0')
-        else:
-            leo.write_serial(serial_read.strip())
