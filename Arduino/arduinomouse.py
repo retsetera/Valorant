@@ -50,7 +50,7 @@ class ArduinoMouse:
         return self.serial_port.readline().decode().strip()
     
     def write_serial(self,text):
-        self.serial_port.write(text)
+        self.serial_port.write(text.encode())
 
     def close(self):
         self.serial_port.close()

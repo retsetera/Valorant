@@ -31,7 +31,7 @@ def quadratic_interpolation(start, mid, end, t):
 
 def get_curve_points(start, middle, end, time_function):
     points = []
-    for t in np.linspace(0, 1, 250):
+    for t in np.linspace(0, 1, 50):
         x = time_function(t)
         point = quadratic_interpolation(start,middle,end, x)
         points.append((math.floor(point[0]), math.floor(point[1])))

@@ -24,7 +24,7 @@ void loop()
       signed char y = Serial.parseInt();
       signed char wheel = Serial.parseInt();
       
-      Mouse.move(x, y, wheel);
+      Mouse.move(x, y, 0);
     }
     else if (inChar=='L')
     {
