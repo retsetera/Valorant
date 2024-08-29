@@ -1,6 +1,6 @@
 from pynput import mouse
 from pynput.mouse import Controller, Button
-from Arduino.arduinomouse import ArduinoMouse, arduino_task
+from Arduino.arduinomouse import ArduinoMouse, mouse_passthrough
 
 class Mouse:
     def __init__(self,use_arduino:bool):
@@ -8,12 +8,19 @@ class Mouse:
             if use_arduino:
                 self.arduino_leo=ArduinoMouse('Leo')
                 self.arduino_due=ArduinoMouse('Due')
+                self.mouse_passthrough = mouse_passthrough(self.arduino_leo, self.arduino_due)
             else:
                 self.mouse = Controller()
 
-    def mouse_task(self):
+    def get_leo(self):
+        return self.arduino_leo
+    
+    def get_due(self):
+        return self.arduino_due
+
+    def mouse_passthrough(self,activated):
         if(self.use_arduino):
-             arduino_task(self.arduino_leo,self.arduino_due)
+            self.mouse_passthrough.set_activated(activated)
 
 
     def move(self,x,y,wheel):

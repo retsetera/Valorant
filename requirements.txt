@@ -1,0 +1,10 @@
+keyboard==0.13.5
+matplotlib==3.9.2
+mss==9.0.1
+numpy==2.1.0
+opencv_python==4.10.0.84
+opencv_python_headless==4.10.0.84
+Pillow==10.4.0
+pynput==1.7.7
+pyserial==3.5
+termcolor==2.4.0

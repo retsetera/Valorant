@@ -5,7 +5,7 @@ import cv2
 import os
 import math
 from pathlib import Path
-
+import matplotlib.pyplot as plt
 reference_contour=np.load((Path(__file__) / '../ContourReferences/reference_contour1.npy').resolve())
 reference_contour2=np.load((Path(__file__) / '../ContourReferences/reference_contour2.npy').resolve())
 def outline_filter(_img,color,fov):
@@ -48,5 +48,4 @@ def outline_filter(_img,color,fov):
 def check_area(position):
     return cv2.contourArea(position[0])
 
-#data,picture=outline_filter(Image.open('C:/Users/retse/Downloads/Purple-1024x576.jpg'),0,300)
-#print()
+#data,picture=outline_filter(Image.open("C:/Users/Admin/Downloads/Purple-1024x576.jpg"),0,300)

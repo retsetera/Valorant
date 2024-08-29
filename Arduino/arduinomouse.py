@@ -5,7 +5,7 @@ import random
 import time
 import sys
 from termcolor import colored
-
+import threading
 
 
 class ArduinoMouse:
@@ -19,6 +19,7 @@ class ArduinoMouse:
         except serial.SerialException:
             print(colored('[Error]', 'red'), colored('Program is already open or the serial port is being used by another app.', 'white'))
             sys.exit()
+        
 
     def find_serial_port(self, port_search_term):
         port = next((port for port in list_ports.comports() if (("Arduino" in port.description) and (port_search_term in port.description))), None)
@@ -58,8 +59,21 @@ class ArduinoMouse:
     def __del__(self):
         self.close()
 
-def arduino_task(leo,due):
-    serial_read = due.read_serial()
-    if (serial_read != ''):
-        leo.write_serial(serial_read.strip())
+class mouse_passthrough:
+    def __init__(self,leo,due):
+        self.leo=leo
+        self.due=due
+        self.activated=False
+        self.thread = threading.Thread(target=self.arduino_task,args=[self.leo,self.due])
+        self.thread.start()
+    def __call__(self):
+        return self.activated
+    def set_activated(self, activated):
+        self.activated = activated
+    def arduino_task(self,leo,due):
+        serial_read = due.read_serial()
+        if (serial_read != '' and self.activated):
+            leo.write_serial(serial_read.strip())
+
+
 
