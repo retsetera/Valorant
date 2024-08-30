@@ -26,13 +26,13 @@ class dan:
         self.camera = ScreenCapture(0,0,resolution)
         self.middle_of_screen=(resolution[0]/2,resolution[1]/2)
         self.mouse=Mouse(use_arduino)
-        self.img_show=imshow(self.resolution)
+        #self.img_show=imshow(self.resolution)
     def task(self):
         img = self.camera.get_screen()
         if img is not None:
             screen=img
         data, picture = outline_filter(screen,self.color,self.fov)
-        self.img_show(picture)
+        #self.img_show(picture)
         if not keyboard.is_pressed(self.activation_key):
             self.mouse.mouse_passthrough(True)
             return
@@ -61,18 +61,30 @@ class dan:
                 break
             self.mouse.move(point[0],point[1],0)
             #time.sleep(amount_to_delay)
-
-        
-
         if (keyboard.is_pressed(self.activation_key)):
             self.mouse.click()
+        position = [self.resolution[0]-position[0],self.resolution[1]-position[1]]
+
+        mpvariation = math.floor(dist*0.2)
+        curve = get_curve(self.middle_of_screen, position, mpvariation, sigmoid_time_func, self.middle_of_screen)
+
+        self.mouse.mouse_passthrough(False)
+        self.mouse.go_to_point(self.middle_of_screen)
+        amount_to_delay=0.00000000001*dist
+        for point in curve:
+            if (not keyboard.is_pressed(self.activation_key)):
+                break
+            self.mouse.move(point[0],point[1],0)
+            #time.sleep(amount_to_delay)
+
+        
             
         self.mouse.mouse_passthrough(True)
         
 
 
 
-bot = dan((1920,1080),500,'ctrl',0,False,1)
+bot = dan((2560,1080),500,'ctrl',0,True,0.3)
 while True:
     bot.task()
 

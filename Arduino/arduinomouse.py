@@ -63,17 +63,18 @@ class mouse_passthrough:
     def __init__(self,leo,due):
         self.leo=leo
         self.due=due
-        self.activated=False
-        self.thread = threading.Thread(target=self.arduino_task,args=[self.leo,self.due])
+        self.activated=True
+        self.thread = threading.Thread(target=self.arduino_task)
         self.thread.start()
     def __call__(self):
         return self.activated
     def set_activated(self, activated):
         self.activated = activated
-    def arduino_task(self,leo,due):
-        serial_read = due.read_serial()
-        if (serial_read != '' and self.activated):
-            leo.write_serial(serial_read.strip())
+    def arduino_task(self):
+        while True:
+            serial_read = self.due.read_serial()
+            if (serial_read != '' and self.activated):
+                self.leo.write_serial(serial_read.strip())
 
 
 
