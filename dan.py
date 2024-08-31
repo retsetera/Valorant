@@ -26,13 +26,13 @@ class dan:
         self.camera = ScreenCapture(0,0,resolution)
         self.middle_of_screen=(resolution[0]/2,resolution[1]/2)
         self.mouse=Mouse(use_arduino)
-        #self.img_show=imshow(self.resolution)
+        self.img_show=imshow(self.resolution)
     def task(self):
         img = self.camera.get_screen()
         if img is not None:
             screen=img
         data, picture = outline_filter(screen,self.color,self.fov)
-        #self.img_show(picture)
+        self.img_show(picture)
         if not keyboard.is_pressed(self.activation_key):
             self.mouse.mouse_passthrough(True)
             return
@@ -84,7 +84,7 @@ class dan:
 
 
 
-bot = dan((2560,1080),500,'ctrl',0,True,0.3)
+bot = dan((1920,1080),500,'ctrl',0,False,1)
 while True:
     bot.task()
 
