@@ -8,7 +8,7 @@ class Mouse:
             if use_arduino:
                 self.arduino_leo=ArduinoMouse('Leo')
                 self.arduino_due=ArduinoMouse('Due')
-                self.mouse_passthrough = mouse_passthrough(self.arduino_leo, self.arduino_due)
+                self._mouse_passthrough = mouse_passthrough(self.arduino_leo, self.arduino_due)
             else:
                 self.mouse = Controller()
 
@@ -20,7 +20,7 @@ class Mouse:
 
     def mouse_passthrough(self,activated):
         if(self.use_arduino):
-            self.mouse_passthrough.set_activated(activated)
+            self._mouse_passthrough.set_activated(activated)
 
 
     def move(self,x,y,wheel):

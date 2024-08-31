@@ -18,7 +18,7 @@ def outline_filter(_img,color,fov):
 
     mask = cv2.inRange(hsv, colors[color][0], colors[color][1])
 
-    dilated = cv2.dilate(mask, None, iterations=7)#iteration needs to be twea
+    dilated = cv2.dilate(mask, None, iterations=3)#iteration needs to be twea
     contours, _ = cv2.findContours(dilated, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
     
     if len(contours)==0:

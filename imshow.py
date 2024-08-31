@@ -6,7 +6,7 @@ import cv2
 class imshow:
     def __init__(self,resolution):
         pygame.init()
-        self.screen = pygame.display.set_mode((500,500), pygame.RESIZABLE)
+        self.screen = pygame.display.set_mode((500,500),pygame.RESIZABLE)
         pygame.display.set_caption('dan')
     
     def __call__(self,img):
