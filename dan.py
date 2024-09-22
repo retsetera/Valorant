@@ -63,7 +63,7 @@ class dan:
             #time.sleep(amount_to_delay)
         if (keyboard.is_pressed(self.activation_key)):
             self.mouse.click()
-        position = [self.resolution[0]-position[0],self.resolution[1]-position[1]]
+        """position = [self.resolution[0]-position[0],self.resolution[1]-position[1]]
 
         mpvariation = math.floor(dist*0.2)
         curve = get_curve(self.middle_of_screen, position, mpvariation, sigmoid_time_func, self.middle_of_screen)
@@ -77,14 +77,14 @@ class dan:
             self.mouse.move(point[0],point[1],0)
             #time.sleep(amount_to_delay)
 
-        
+        """
             
         self.mouse.mouse_passthrough(True)
         
 
+valorantdpi = 0.3
 
-
-bot = dan((1920,1080),500,'ctrl',0,False,1)
+bot = dan((2560,1080),500,'ctrl',0,True,0.9)
 while True:
     bot.task()
 
