@@ -18,7 +18,7 @@ class ArduinoMouse:
             self.serial_port.open()
         except serial.SerialException:
             print(colored('[Error]', 'red'), colored('Program is already open or the serial port is being used by another app.', 'white'))
-            sys.exit()
+            sys.exit()              
         
 
     def find_serial_port(self, port_search_term):
